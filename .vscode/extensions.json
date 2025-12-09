@@ -1,0 +1,14 @@
+{
+  "recommendations": [
+    "ritwickdey.LiveServer",
+    "ms-vscode.vscode-js-debug",
+    "esbenp.prettier-vscode",
+    "bradlc.vscode-tailwindcss",
+    "PKief.material-icon-theme",
+    "WallabyJs.console-ninja",
+    "formulahendry.auto-rename-tag",
+    "christian-kohler.path-intellisense",
+    "VisualStudioExptTeam.vscodeintellicode",
+    "aaron-bond.better-comments"
+  ]
+}
