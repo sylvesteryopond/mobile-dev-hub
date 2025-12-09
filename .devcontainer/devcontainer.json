@@ -1,0 +1,36 @@
+{
+  "name": "Mobile Dev Hub",
+  "build": {
+    "dockerfile": "Dockerfile",
+    "context": ".."
+  },
+  "customizations": {
+    "vscode": {
+      "settings": {
+        "terminal.integrated.fontSize": 14,
+        "editor.fontSize": 14,
+        "editor.lineHeight": 24,
+        "workbench.tree.indent": 16,
+        "editor.minimap.enabled": false
+      },
+      "extensions": [
+        "ritwickdey.LiveServer",
+        "ms-vscode.vscode-js-debug",
+        "esbenp.prettier-vscode",
+        "bradlc.vscode-tailwindcss"
+      ]
+    }
+  },
+  "forwardPorts": [3000, 3001, 5500, 8080],
+  "portsAttributes": {
+    "3000": {
+      "label": "React App",
+      "onAutoForward": "openPreview"
+    },
+    "3001": {
+      "label": "API Server"
+    }
+  },
+  "postCreateCommand": "bash setup.sh",
+  "remoteUser": "node"
+}
