@@ -1,0 +1,37 @@
+#!/usr/bin/env node
+const { exec } = require('child_process');
+const qrcode = require('qrcode-terminal');
+const chalk = require('chalk');
+
+console.log(chalk.cyan('🚀 Starting Mobile Dev Hub...'));
+
+const services = [
+  { name: '📱 Mobile Portal', command: 'cd portal && npx live-server --port=5500 --host=0.0.0.0', port: 5500 },
+  { name: '⚡ Preview Server', command: 'node server/preview-server.js', port: 3000 },
+  { name: '🔧 API Server', command: 'node server/api.js', port: 3001 }
+];
+
+services.forEach(service => {
+  const proc = exec(service.command, (error, stdout, stderr) => {
+    if (error) {
+      console.log(chalk.red(`Error starting ${service.name}:`, error));
+      return;
+    }
+  });
+
+  proc.stdout.on('data', (data) => {
+    console.log(chalk.yellow(`[${service.name}]`), data.toString().trim());
+  });
+
+  // Generate QR code for main portal
+  if (service.port === 5500) {
+    setTimeout(() => {
+      console.log(chalk.green('\n📱 Scan to open on mobile:'));
+      qrcode.generate(`http://localhost:${service.port}`, { small: true });
+      console.log(chalk.blue(`🔗 Or open: http://localhost:${service.port}`));
+    }, 2000);
+  }
+});
+
+console.log(chalk.green('\n✅ All services starting...'));
+console.log(chalk.dim('Press Ctrl+C to stop all services'));
