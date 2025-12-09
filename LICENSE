@@ -1,21 +1,135 @@
-MIT License
 
-Copyright (c) 2025 sylvesteryopond
+## 16. `setup.sh`
+```bash
+#!/bin/bash
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+echo "🚀 Setting up Mobile Dev Hub..."
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+# Update system
+sudo apt-get update
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+# Install Node.js if not present
+if ! command -v node &> /dev/null; then
+    echo "📦 Installing Node.js..."
+    curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
+    sudo apt-get install -y nodejs
+fi
+
+# Install global npm packages
+echo "📦 Installing global packages..."
+sudo npm install -g \
+    live-server \
+    nodemon \
+    create-react-app \
+    vite \
+    qrcode-terminal
+
+# Install project dependencies
+echo "📦 Installing project dependencies..."
+npm install
+
+# Create necessary directories
+echo "📁 Creating project structure..."
+mkdir -p projects
+mkdir -p config
+
+# Set up default templates
+echo "📋 Setting up templates..."
+if [ ! -f "templates/react-vite/package.json" ]; then
+    mkdir -p templates/react-vite
+    cat > templates/react-vite/package.json << 'EOF'
+{
+  "name": "react-vite-app",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "@types/react": "^18.0.27",
+    "@types/react-dom": "^18.0.10",
+    "@vitejs/plugin-react": "^4.0.0",
+    "vite": "^4.3.0"
+  }
+}
+EOF
+    cat > templates/react-vite/vite.config.js << 'EOF'
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
+
+export default defineConfig({
+  plugins: [react()],
+  server: {
+    host: '0.0.0.0',
+    port: 3000
+  }
+})
+EOF
+fi
+
+# Create AI config if needed
+if [ ! -f "config/ai-config.json" ]; then
+    echo "🤖 Creating AI config template..."
+    cat > config/ai-config.json << 'EOF'
+{
+  "apiKey": "your-openai-api-key-here",
+  "model": "gpt-3.5-turbo",
+  "maxTokens": 1000
+}
+EOF
+    echo "⚠️  Please update config/ai-config.json with your OpenAI API key"
+fi
+
+# Make scripts executable
+echo "🔧 Making scripts executable..."
+chmod +x scripts/*.js
+
+# Set up live reload script
+echo "🔄 Setting up live reload..."
+cat > public/live-reload.js << 'EOF'
+// Live reload client
+(function() {
+    const socket = new WebSocket('ws://' + window.location.hostname + ':35729');
+    
+    socket.onopen = function() {
+        console.log('🔄 Live reload connected');
+    };
+    
+    socket.onmessage = function(event) {
+        const data = JSON.parse(event.data);
+        if (data.type === 'reload') {
+            console.log('🔄 Reloading due to file change:', data.file);
+            setTimeout(() => window.location.reload(), 100);
+        }
+    };
+    
+    socket.onclose = function() {
+        console.log('🔌 Live reload disconnected');
+        setTimeout(() => {
+            console.log('🔄 Attempting to reconnect...');
+            location.reload();
+        }, 3000);
+    };
+})();
+EOF
+
+echo ""
+echo "✅ Setup complete!"
+echo ""
+echo "📱 To start:"
+echo "   npm start"
+echo ""
+echo "📋 Or use VS Code tasks:"
+echo "   Ctrl+Shift+P -> Run Task -> 🚀 Start All Services"
+echo ""
+echo "🌐 Open the portal:"
+echo "   http://localhost:5500"
+echo ""
+echo "📲 Scan the QR code with your phone to start coding!"
