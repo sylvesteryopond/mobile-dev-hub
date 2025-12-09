@@ -1,0 +1,20 @@
+{
+  "editor.fontSize": 14,
+  "editor.lineHeight": 24,
+  "editor.tabSize": 2,
+  "editor.wordWrap": "on",
+  "editor.minimap.enabled": false,
+  "editor.smoothScrolling": true,
+  "workbench.tree.indent": 16,
+  "workbench.iconTheme": "material-icon-theme",
+  "terminal.integrated.fontSize": 13,
+  "files.autoSave": "afterDelay",
+  "editor.formatOnSave": true,
+  "emmet.includeLanguages": {
+    "javascript": "javascriptreact",
+    "typescript": "typescriptreact"
+  },
+  "liveServer.settings.port": 5500,
+  "liveServer.settings.root": "/portal",
+  "prettier.requireConfig": true
+}
