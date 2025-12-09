@@ -1,0 +1,44 @@
+{
+  "name": "mobile-dev-hub",
+  "version": "1.0.0",
+  "description": "A mobile-optimized development environment for coding on-the-go",
+  "main": "scripts/start-all.js",
+  "scripts": {
+    "start": "node scripts/start-all.js",
+    "portal": "cd portal && npx live-server --port=5500 --host=0.0.0.0",
+    "preview": "node server/preview-server.js",
+    "api": "node server/api.js",
+    "live-reload": "node scripts/live-preview.js",
+    "qr": "node scripts/qr-generator.js",
+    "ai": "node scripts/ai-assist.js",
+    "new": "node scripts/create-project.js",
+    "dev": "concurrently \"npm run portal\" \"npm run preview\" \"npm run api\" \"npm run live-reload\""
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "socket.io": "^4.6.1",
+    "ws": "^8.13.0",
+    "chokidar": "^3.5.3",
+    "qrcode-terminal": "^0.12.0",
+    "openai": "^3.3.0",
+    "inquirer": "^8.2.6",
+    "chalk": "^4.1.2",
+    "cors": "^2.8.5",
+    "fs-extra": "^11.1.1",
+    "live-server": "^1.2.2",
+    "concurrently": "^8.2.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.4.5",
+    "nodemon": "^3.0.1"
+  },
+  "keywords": [
+    "mobile",
+    "development",
+    "codespace",
+    "stackblitz",
+    "vscode"
+  ],
+  "author": "Your Name",
+  "license": "MIT"
+}
